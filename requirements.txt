@@ -4,3 +4,6 @@ click
 psutil
 xarray
 cftime
+toolz
+netCDF4
+dask
