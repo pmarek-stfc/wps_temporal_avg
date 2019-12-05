@@ -48,7 +48,7 @@ class Exercise(Process):
                                          'HadGEM2-CC',
                                          'HadGEM2-A',
                                          ],
-                         default='HadCM3'),
+                         default='HadGEM2-CC'),
                          ]
         outputs = [
             ComplexOutput('output', 'NetCDF file',
@@ -94,14 +94,11 @@ class Exercise(Process):
         d1 = cftime.Datetime360Day(2010, 1, 1)
         d2 = cftime.Datetime360Day(2020, 1, 1)
 
-        nc_files_path = f'xarray'
-        files_path = os.path.join(str(Path.home()), nc_files_path)
-        files = glob.glob(files_path + '/tas*.nc')
+        glob_pattern = f'/badc/cmip5/data/cmip5/output1/MOHC/{model}/rcp45/mon/atmos/Amon/r1i1p1/latest/{variable}/*.nc'
+        files = glob.glob(glob_pattern)
 
-        #response.update_status("Reading through files", 10)
         files_to_open = get_years(files)
         new_dataset = open_mfdatasets(files_to_open)
-        #response.update_status("Calculating temporal average", 50)
 
         sliced_dataset = new_dataset.sel(time=slice(d1, d2), lon=slice(request.inputs['min_lon'][0].data,
                                                                     request.inputs['max_lon'][0].data),
@@ -111,8 +108,9 @@ class Exercise(Process):
         mean_array = sliced_dataset.mean(dim='time')
         print(mean_array)
         response.update_status("Writing results to a new NetCDF4 file", 50)
-        # result_nc_file = mean_array.to_netcdf('results.nc')
-
-        response.outputs['output'].nc_file = mean_array.to_netcdf('resultsssss.nc')
+        
+        output_path = '/tmp/output.nc'
+        response.outputs['output'].nc_file = mean_array.to_netcdf(output_path)
+        print(f'Wrote: {output_path}')
         response.update_status("Done.", 100)
         return response
