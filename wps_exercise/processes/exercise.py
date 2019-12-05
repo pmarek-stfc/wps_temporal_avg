@@ -45,10 +45,8 @@ class Exercise(Process):
                          data_type='string',
                          allowed_values=['HadGEM2-ES',
                                          'HadCM3',
-                                         'GFDL-CM2p1',
-                                         'bcc-csm1-1-m',
-                                         'bcc-csm1-1',
-                                         'BNU-ESM',
+                                         'HadGEM2-CC',
+                                         'HadGEM2-A',
                                          ],
                          default='HadCM3'),
                          ]
