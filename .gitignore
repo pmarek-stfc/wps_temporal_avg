@@ -84,3 +84,6 @@ testdata.json
 *.a
 *.mod
 *.out
+
+# App related
+*.nc
